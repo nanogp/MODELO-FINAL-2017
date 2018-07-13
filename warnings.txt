@@ -1,0 +1,4 @@
+09/07/2017;09:33;Servcio1.exe;Disk faliure;juan@soporte.com.ar
+09/07/2017;09:33;Servcio1.exe;Disk faliure;juan@soporte.com.ar
+09/07/2017;09:34;Servcio2.exe;Out of memory;maria@soporte.com.ar
+09/07/2017;09:34;Servcio2.exe;Out of memory;maria@soporte.com.ar

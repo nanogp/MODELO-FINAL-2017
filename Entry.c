@@ -194,10 +194,12 @@ void* eEntry_newParam(int id, int serviceId, char* date, char* time, int graveda
 /**************************** LISTADO DE DATOS ***************************************************/
 void eEntry_mostrarUno(void* this)
 {
+    int id;
     if(this != NULL)
     {
+        id = eEntry_getId(this);
         printf(ENTRY_MOSTRAR_UNO_MASCARA,
-               eEntry_getId(this),
+               id,
                eEntry_getServiceId(this),
                eEntry_getDate(this),
                eEntry_getTime(this),
@@ -316,7 +318,7 @@ void* eEntry_parserAVoid(char* this, int bufferSize)
     {
         sscanf(this, "%[^;];%[^;];%d;%d;%[^\n]\n", date, time, &serviceId, &gravedad, msg);
         returnAux = eEntry_newParam(0, serviceId, date, time, gravedad, msg);
-        eEntry_mostrarUno(returnAux);pausa();
+        //eEntry_mostrarUno(returnAux);pausa();
     }
 
     return returnAux;
@@ -328,13 +330,104 @@ void eEntry_cargarTxt(ArrayList* this)
     eGestion_cargarArchivoTexto(this,
                                 eEntry_parserAVoid,
                                 eEntry_compararPorId,
-                                GESTION_CARGAR_ARCHIVO_TEXTO_TITULO,
+                                "CARGAR ARCHIVO LOG",
                                 2000);
     for(int i=0 ; i<this->len(this) ; i++)
     {
         pElement = (eEntry*)this->get(this, i);
-        eEntry_setId(pElement, i+1);
+        eEntry_setId(pElement, (i+1));
     }
+}
+//-----------------------------------------------------------------------------------------------//
+void eEntry_procesar(ArrayList* this, ArrayList* that)
+{
+    void* entry;
+    void* service;
+    int gravedad;
+    char* buffer = eString_new(2000);
+    int seMostroCabecera = 0;
+    FILE* pFileWarnings;
+    FILE* pFileErrors;
+    char* date, time, name, msg;
+//Deberá evaluar el campo “Gravedad” con el siguiente criterio:
+//• Si la gravedad es menor a 3, se descartará el error.
+//• Si la gravedad es 3, se deberán copiar los mensajes en el archivo warnings.txt,
+//para cualquier servicio menos el de ID 45.
+//• Si la gravedad tiene un valor entre 4 y 7 (inclusive) se imprimirán por pantalla
+//con el siguiente formato :
+//Fecha Hora Nombre servicio Mensaje de error Gravedad
+//• Si la gravedad es mayor a 7, se copiarán los mensajes en el archivo errors.txt.
+//Cada línea de los archivos warnings.txt y errors.txt deberán tener el siguiente
+//formato:
+//Fecha Hora Nombre servicio Mensaje de error E-mail soporte
+//Los campos estarán separados por “;”
+
+    pFileWarnings = fopen("warnings.txt","w");
+    pFileErrors = fopen("errors.txt","w");
+
+    if(this != NULL && that != NULL && buffer != NULL && pFileErrors != NULL && pFileWarnings != NULL)
+    {
+        for(int i=0 ; i<this->len(this) ; i++)
+        {
+            entry = this->get(this, i);
+            service = eGestion_buscarPorId(that, eService_getId, eEntry_getServiceId(entry));
+            gravedad = eEntry_getGravedad(entry);
+
+            if(gravedad == 3)
+            {
+                //Fecha;Hora;Nombre servicio;Mensaje de error;E-mail soporte
+                strcpy(buffer, "");
+                strcat(buffer, eEntry_getDate(entry));
+                strcat(buffer, ";");
+                strcat(buffer, eEntry_getTime(entry));
+                strcat(buffer, ";");
+                strcat(buffer, eService_getName(service));
+                strcat(buffer, ";");
+                strcat(buffer, eEntry_getMsg(entry));
+                strcat(buffer, ";");
+                strcat(buffer, eService_getEmail(service));
+                strcat(buffer, "\n");
+                fputs(buffer, pFileWarnings);
+            }
+            else if(gravedad > 3 && gravedad <= 7)
+            {
+                if(!seMostroCabecera)
+                {
+                    printf("\nFECHA \t HORA \t NOMBRE SERVICIO \t MENSAJE DE ERROR \t GRAVEDAD"
+                           "\n----- \t ---- \t --------------- \t ---------------- \t --------");
+                    seMostroCabecera = 1;
+                }
+                date = eEntry_getDate(entry);
+                time = eEntry_getTime(entry);
+                name = eService_getName(service);
+                msg = eEntry_getMsg(entry);
+                //Fecha Hora Nombre servicio Mensaje de error Gravedad
+                printf("\n%s \t\t %s \t %s \t %s \t %d",date,time,name,msg,gravedad);
+            }
+            else if(gravedad > 7)
+            {
+                strcpy(buffer, "");
+                strcat(buffer, eEntry_getDate(entry));
+                strcat(buffer, ";");
+                strcat(buffer, eEntry_getTime(entry));
+                strcat(buffer, ";");
+                strcat(buffer, eService_getName(service));
+                strcat(buffer, ";");
+                strcat(buffer, eEntry_getMsg(entry));
+                strcat(buffer, ";");
+                strcat(buffer, eService_getEmail(service));
+                strcat(buffer, "\n");
+                fputs(buffer, pFileErrors);
+            }
+        }
+        fclose(pFileErrors);
+        fclose(pFileWarnings);
+    }
+    else
+    {
+        imprimirEnPantalla("\n error de asignacion de punteros");
+    }
+    pausa();
 }
 /**************************** ORDENAMIENTO *******************************************************/
 int eEntry_compararPorId(void* this, void* that)
