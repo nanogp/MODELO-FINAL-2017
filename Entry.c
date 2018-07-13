@@ -316,7 +316,7 @@ void* eEntry_parserAVoid(char* this, int bufferSize)
 
     if(this != NULL)
     {
-        sscanf(this, "%[^;];%[^;];%d[^;];%d[^\n]\n", date, time, &serviceId, &gravedad, msg);
+        sscanf(this, "%[^;];%[^;];%d;%d;%[^\n]", date, time, &serviceId, &gravedad, msg);
         returnAux = eEntry_newParam(0, serviceId, date, time, gravedad, msg);
         //eEntry_mostrarUno(returnAux);pausa();
     }
@@ -348,18 +348,6 @@ void eEntry_procesar(ArrayList* this, ArrayList* that)
     int seMostroCabecera = 0;
     FILE* pFileWarnings;
     FILE* pFileErrors;
-//Deberá evaluar el campo “Gravedad” con el siguiente criterio:
-//• Si la gravedad es menor a 3, se descartará el error.
-//• Si la gravedad es 3, se deberán copiar los mensajes en el archivo warnings.txt,
-//para cualquier servicio menos el de ID 45.
-//• Si la gravedad tiene un valor entre 4 y 7 (inclusive) se imprimirán por pantalla
-//con el siguiente formato :
-//Fecha Hora Nombre servicio Mensaje de error Gravedad
-//• Si la gravedad es mayor a 7, se copiarán los mensajes en el archivo errors.txt.
-//Cada línea de los archivos warnings.txt y errors.txt deberán tener el siguiente
-//formato:
-//Fecha Hora Nombre servicio Mensaje de error E-mail soporte
-//Los campos estarán separados por “;”
 
     pFileWarnings = fopen("warnings.txt","w");
     pFileErrors = fopen("errors.txt","w");
@@ -392,12 +380,12 @@ void eEntry_procesar(ArrayList* this, ArrayList* that)
             {
                 if(!seMostroCabecera)
                 {
-                    printf("\nFECHA \t HORA \t NOMBRE SERVICIO \t MENSAJE DE ERROR \t GRAVEDAD"
-                           "\n----- \t ---- \t --------------- \t ---------------- \t --------");
+                    printf("\nFECHA \t\t HORA \t NOMBRE SERVICIO \t MENSAJE DE ERROR \t GRAVEDAD"
+                           "\n----- \t\t ---- \t --------------- \t ---------------- \t --------");
                     seMostroCabecera = 1;
                 }
 
-                #define MASCARA_MOSTRAR "\n%s \t\t %s \t %s \t %s \t %d"
+                #define MASCARA_MOSTRAR "\n%s \t %s \t %s \t %s \t %d"
                 //Fecha Hora Nombre servicio Mensaje de error Gravedad
                 printf(MASCARA_MOSTRAR,
                        eEntry_getDate(entry),
@@ -442,39 +430,3 @@ int eEntry_compararPorId(void* this, void* that)
     }
     return returnAux;
 }
-//-----------------------------------------------------------------------------------------------//
-//int eEntry_compararPorNombre(void* this, void* that)
-//{
-//    int returnAux;
-//
-//    if(this != NULL && that != NULL)
-//    {
-//        eGestion_compararPorString(this, that, eEntry_getMsg)
-//    }
-//    return returnAux;
-//}
-//-----------------------------------------------------------------------------------------------//
-//int eEntry_ordenarPorNombre(ArrayList* this)
-//{
-//    int returnAux = CHECK_POINTER;
-//
-//    if(this != NULL)
-//    {
-//        returnAux = OK;
-//        this->sort(this, eEntry_compararPorNombre, ASC);
-//    }
-//    return returnAux;
-//}
-////-----------------------------------------------------------------------------------------------//
-//int eEntry_ordenarPorTarjeta(ArrayList* this)
-//{
-//    int returnAux = CHECK_POINTER;
-//
-//    if(this != NULL)
-//    {
-//        returnAux = OK;
-//        this->sort(this, eEntry_compararPorTarjeta, ASC);
-//    }
-//    return returnAux;
-//}
-//-----------------------------------------------------------------------------------------------//

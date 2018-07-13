@@ -97,7 +97,7 @@ int eService_ordenarPorName(ArrayList* this);
 
 /**************************** LISTADOS ***********************************************************/
 #define SERVICE_MOSTRAR_UNO_MASCARA "\n%d \t %-10s \t %-20s"
-#define SERVICE_MOSTRAR_UNO_CABECERA "\nID \t NAME \t EMAIL\n-- \t ---- \t -----"
+#define SERVICE_MOSTRAR_UNO_CABECERA "\nID \t NAME \t\t EMAIL\n-- \t ---- \t\t -----"
 #define SERVICE_MOSTRAR_UNO_PAGINADO 20
 
 /**************************** ORDENAMIENTO *******************************************************/

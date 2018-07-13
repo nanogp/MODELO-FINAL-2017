@@ -35,7 +35,6 @@ typedef struct
     char msg[ENTRY_LARGO_MSG];
 }eEntry;
 
-
 /**************************** GETTERS ************************************************************/
 int eEntry_getId(void* this);
 int eEntry_getServiceId(void* this);
@@ -111,8 +110,8 @@ int eEntry_ordenarPorTarjeta(ArrayList* this);
 #define ENTRY_MSJ_REGISTRO_MODIFICADO "\n\nEntry modificado: "
 
 /**************************** LISTADOS ***********************************************************/
-#define ENTRY_MOSTRAR_UNO_MASCARA "\n%d \t %d \t\t %-10s \t\t %-20s \t %d  \t %-20s"
-#define ENTRY_MOSTRAR_UNO_CABECERA "\nID \t ID SERVICIO \t\t DATE \t\t TIME \t GRAVEDAD \t MSG\n-- \t ----------- \t ---- \t\t ---- \t\t -------- \t ---"
+#define ENTRY_MOSTRAR_UNO_MASCARA "\n%d \t %d \t\t %-10s \t\t %s \t %d  \t %s"
+#define ENTRY_MOSTRAR_UNO_CABECERA "\nID \t ID SERVICIO \t DATE \t\t\t TIME \t GRAVEDAD \t MSG\n-- \t ----------- \t ---- \t\t\t ---- \t -------- \t ---"
 #define ENTRY_MOSTRAR_UNO_PAGINADO 20
 
 /**************************** ORDENAMIENTO *******************************************************/
