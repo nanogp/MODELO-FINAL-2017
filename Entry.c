@@ -316,7 +316,7 @@ void* eEntry_parserAVoid(char* this, int bufferSize)
 
     if(this != NULL)
     {
-        sscanf(this, "%[^;];%[^;];%d;%d;%[^\n]\n", date, time, &serviceId, &gravedad, msg);
+        sscanf(this, "%[^;];%[^;];%d[^;];%d[^\n]\n", date, time, &serviceId, &gravedad, msg);
         returnAux = eEntry_newParam(0, serviceId, date, time, gravedad, msg);
         //eEntry_mostrarUno(returnAux);pausa();
     }
@@ -348,7 +348,6 @@ void eEntry_procesar(ArrayList* this, ArrayList* that)
     int seMostroCabecera = 0;
     FILE* pFileWarnings;
     FILE* pFileErrors;
-    char* date, time, name, msg;
 //Deberá evaluar el campo “Gravedad” con el siguiente criterio:
 //• Si la gravedad es menor a 3, se descartará el error.
 //• Si la gravedad es 3, se deberán copiar los mensajes en el archivo warnings.txt,
@@ -397,12 +396,15 @@ void eEntry_procesar(ArrayList* this, ArrayList* that)
                            "\n----- \t ---- \t --------------- \t ---------------- \t --------");
                     seMostroCabecera = 1;
                 }
-                date = eEntry_getDate(entry);
-                time = eEntry_getTime(entry);
-                name = eService_getName(service);
-                msg = eEntry_getMsg(entry);
+
+                #define MASCARA_MOSTRAR "\n%s \t\t %s \t %s \t %s \t %d"
                 //Fecha Hora Nombre servicio Mensaje de error Gravedad
-                printf("\n%s \t\t %s \t %s \t %s \t %d",date,time,name,msg,gravedad);
+                printf(MASCARA_MOSTRAR,
+                       eEntry_getDate(entry),
+                       eEntry_getTime(entry),
+                       eService_getName(service),
+                       eEntry_getMsg(entry),
+                       gravedad);
             }
             else if(gravedad > 7)
             {
