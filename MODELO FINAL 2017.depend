@@ -1,0 +1,68 @@
+# depslib dependency file v1.0
+1531436478 source:c:\github\modelo final 2017\arraylist.c
+	"ArrayList.h"
+
+1531436478 c:\github\modelo final 2017\arraylist.h
+	"General.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1531436478 c:\github\modelo final 2017\general.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1531436478 source:c:\github\modelo final 2017\general.c
+	"General.h"
+
+1531436478 source:c:\github\modelo final 2017\gestion.c
+	"Gestion.h"
+	"General.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1531436478 c:\github\modelo final 2017\gestion.h
+	"ArrayList.h"
+
+1530983146 source:c:\github\modelo final 2017\menu.c
+	"Menu.h"
+	"General.h"
+	<stdio.h>
+
+1530983146 c:\github\modelo final 2017\menu.h
+
+1531439984 source:c:\github\modelo final 2017\service.c
+	"Service.h"
+
+1531436478 c:\github\modelo final 2017\service.h
+	"General.h"
+	"Gestion.h"
+	"Menu.h"
+	"ArrayList.h"
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+
+1531441120 source:c:\github\modelo final 2017\entry.c
+	"Entry.h"
+
+1531439958 c:\github\modelo final 2017\entry.h
+	"General.h"
+	"Gestion.h"
+	"Menu.h"
+	"ArrayList.h"
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+
+1531440244 source:c:\github\modelo final 2017\main.c
+	<stdio.h>
+	<stdlib.h>
+	"General.h"
+	"Gestion.h"
+	"Menu.h"
+	"Entry.h"
+	"Service.h"
+
